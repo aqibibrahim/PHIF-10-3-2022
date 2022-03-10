@@ -1,13 +1,24 @@
 import React, { useState } from 'react';
-import {  View, Text,Image,Dimensions, TouchableOpacity  } from 'react-native';
+import {  View, Text,Image,Dimensions, TouchableOpacity,  Linking,} from 'react-native';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 import { Input } from 'react-native-elements'
 import styles from './style';
 import { useNavigation } from '@react-navigation/native';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+
 import axios from 'axios';
 function Search() {
+  const onSuccess=(e)=> {
+    console.log(e.data)
+    setInputSearch(e.data)
+    setShowQr(false)
+    // Linking.openURL(e.data).catch(err =>
+    //   console.error('An error occured', err)
+    // );
+  }
     const navigation = useNavigation();
+    const [showQr,setShowQr]=useState(false)
     const [inputSearch,setInputSearch]=useState("")
     const handleCointinue = () =>{
       if(inputSearch.length)
@@ -41,7 +52,23 @@ function Search() {
     }
     return (
         <>
-        <View style={{backgroundColor:"white",height:SCREEN_HEIGHT,width:SCREEN_WIDTH}}>
+        {
+
+          showQr ? 
+          <QRCodeScanner
+          onRead={(e)=>onSuccess(e)}
+          topContent={
+            <Text style={styles.centerText}> 
+            On successfull scan there will be a vibration to close the scanner press done button on bottom.
+            </Text>
+          }
+          bottomContent={
+            <TouchableOpacity onPress={()=>showQr(false)} style={styles.buttonTouchable}>
+              <Text style={styles.buttonText}>Done</Text>
+            </TouchableOpacity>
+          }
+        />:
+<View style={{backgroundColor:"white",height:SCREEN_HEIGHT,width:SCREEN_WIDTH}}>
           <Image style={{width:200,height:40,marginVertical:'10%',alignSelf:'center'}} source={require("../../assets/images/header2.png")}/>
           <View style={{marginHorizontal:'5%'}}>
           <View style={{marginVertical:'5%',}}><Text style={{fontWeight:'bold',fontSize:20,color:'black'}}>Welcome <Text style={{fontWeight:'500',fontSize:20,color:'black'}}>Medwork Pharmacy</Text></Text></View>
@@ -58,7 +85,9 @@ function Search() {
                                                 placeholderTextColor={'#bfbfbf'}
                                                 inputContainerStyle={styles.inputContainerStyle}
                                                 inputStyle={styles.inputStyle} /></View>
-            <View style={{flex:0.17}}><TouchableOpacity><Image style={{width:50,height:50}} source={require("../../assets/images/qr.png")}/></TouchableOpacity></View>
+            <View style={{flex:0.17}}><TouchableOpacity onPress={()=>setShowQr(true)}><Image style={{width:50,height:50}} source={require("../../assets/images/qr.png")}/></TouchableOpacity></View>
+            
+           
             </View>
         <View style={{marginTop:'10%'}}>
 
@@ -69,6 +98,9 @@ function Search() {
         </View>
 
         </View>
+        }
+       
+        
         </>
     );
 }
