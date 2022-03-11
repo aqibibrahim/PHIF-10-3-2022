@@ -63,7 +63,7 @@ function Search() {
             </Text>
           }
           bottomContent={
-            <TouchableOpacity onPress={()=>showQr(false)} style={styles.buttonTouchable}>
+            <TouchableOpacity onPress={()=>setShowQr(false)} style={styles.buttonTouchable}>
               <Text style={styles.buttonText}>Done</Text>
             </TouchableOpacity>
           }

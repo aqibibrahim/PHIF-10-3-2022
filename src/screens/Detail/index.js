@@ -121,7 +121,7 @@ function Detail(props) {
                     cancellable: true
                   },
                     callback => console.log('callback'));
-                print();
+                print(hobbies);
             }
 
         })
@@ -131,9 +131,9 @@ function Detail(props) {
         }
     }
 
-    const print = async () => {
+    const print = async (data) => {
 
-      for (var i in selectedtabletData) {
+      for (var i in data) {
         // console.log(orderList[i]);
         // console.log(columnWidth);
         // console.log(columnAliment);
